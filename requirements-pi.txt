@@ -9,6 +9,7 @@ mediapipe>=0.10,<0.10.30; python_version < "3.13"
 
 # Audio I/O
 sounddevice>=0.4.6
+PyAudio>=0.2.14
 SpeechRecognition>=3.10
 pyttsx3>=2.90
 edge-tts>=7.0

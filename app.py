@@ -146,12 +146,19 @@ logging.getLogger().addHandler(_db_handler)
 def open_camera(index, w=320, h=240):
     # Open/read timeout hints are supported by FFmpeg/GStreamer; ignored by some camera backends.
     params = []
-    if hasattr(cv2, "CAP_PROP_OPEN_TIMEOUT_MSEC"):
-        params.extend([cv2.CAP_PROP_OPEN_TIMEOUT_MSEC, 5000])
-    if hasattr(cv2, "CAP_PROP_READ_TIMEOUT_MSEC"):
-        params.extend([cv2.CAP_PROP_READ_TIMEOUT_MSEC, 3000])
+    if os.name == "nt":
+        if hasattr(cv2, "CAP_PROP_OPEN_TIMEOUT_MSEC"):
+            params.extend([cv2.CAP_PROP_OPEN_TIMEOUT_MSEC, 5000])
+        if hasattr(cv2, "CAP_PROP_READ_TIMEOUT_MSEC"):
+            params.extend([cv2.CAP_PROP_READ_TIMEOUT_MSEC, 3000])
     try:
-        c = cv2.VideoCapture(index, cv2.CAP_ANY, params) if params else cv2.VideoCapture(index)
+        if os.name != "nt":
+            # V4L2 tren Linux khong ho tro tham so timeout (gay loi "unsupported parameter").
+            c = cv2.VideoCapture(index, cv2.CAP_V4L2)
+        elif params:
+            c = cv2.VideoCapture(index, cv2.CAP_ANY, params)
+        else:
+            c = cv2.VideoCapture(index)
     except (TypeError, cv2.error):
         c = cv2.VideoCapture(index)
     if not c.isOpened():

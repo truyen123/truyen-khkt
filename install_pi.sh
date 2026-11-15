@@ -49,7 +49,7 @@ cat > ~/.config/autostart/studyguard-kiosk.desktop <<EOF
 [Desktop Entry]
 Type=Application
 Name=StudyGuard Kiosk
-Exec=bash -c 'sleep 8; unclutter -idle 1 & chromium-browser --kiosk --noerrdialogs --disable-infobars --incognito http://127.0.0.1:5000/kiosk'
+Exec=bash -c 'sleep 8; unclutter -idle 1 & $(command -v chromium-browser || command -v chromium) --kiosk --noerrdialogs --disable-infobars --incognito http://127.0.0.1:5000/kiosk'
 EOF
 
 echo "Xong. Khoi dong lai Pi de man hinh tu mo giao dien. Web quan ly: http://$(hostname -I | awk '{print $1}'):5000"
