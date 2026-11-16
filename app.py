@@ -617,6 +617,18 @@ def vision_loop():
             fail_count = 0
             camera_last_frame_monotonic = time.monotonic()
             camera_error = ""
+            
+            # Detect corrupted frame (V4L2 issue on RPi): check if mostly black/noise
+            if frame is not None and frame.size > 0:
+                mean_brightness = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY).mean()
+                if mean_brightness < 5 or mean_brightness > 240:  # all black or all white = corrupted
+                    logger.debug("Skipping corrupted frame (brightness=%.1f)", mean_brightness)
+                    blank = np.zeros((240, 320, 3), dtype=np.uint8)
+                    _, buf = cv2.imencode(".jpg", blank)
+                    _cache_frame(buf)
+                    time.sleep(CAMERA_INTERVAL)
+                    continue
+            
             if frame.shape[1] != 320 or frame.shape[0] != 240:
                 frame = cv2.resize(frame, (320, 240), interpolation=cv2.INTER_AREA)
 
