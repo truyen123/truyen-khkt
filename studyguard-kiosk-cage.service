@@ -1,0 +1,18 @@
+[Unit]
+Description=StudyGuard Kiosk (Cage + Chromium)
+Wants=studyguard.service
+After=network-online.target
+
+[Service]
+Type=simple
+User=letrongtruyen
+WorkingDirectory=%h/truyen-khkt
+ExecStart=%h/truyen-khkt/kiosk-cage.sh
+Restart=on-failure
+RestartSec=5
+
+Environment="XDG_RUNTIME_DIR=/run/user/%U"
+Environment="WAYLAND_DISPLAY=wayland-0"
+
+[Install]
+WantedBy=graphical-session.target

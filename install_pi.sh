@@ -7,7 +7,7 @@ APP_DIR="$PWD"
 
 sudo apt-get update
 sudo apt-get install -y python3-venv python3-dev libportaudio2 portaudio19-dev
-sudo apt-get install -y flac espeak-ng ffmpeg v4l-utils chromium unclutter
+sudo apt-get install -y flac espeak-ng ffmpeg v4l-utils chromium unclutter cage
 sudo apt-get install -y fonts-dejavu-core fonts-noto-core
 
 [ -d .venv ] || python3 -m venv .venv
@@ -44,22 +44,24 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl enable --now studyguard
 
-# ---- Kiosk: systemd user service (doc lap voi labwc/Wayland va LXDE/X11) ----
-chmod +x kiosk.sh
+# ---- Kiosk: systemd user service (dung Cage + Chromium) ----
+chmod +x kiosk-cage.sh
 mkdir -p ~/.config/systemd/user
 cat > ~/.config/systemd/user/studyguard-kiosk.service <<EOF
 [Unit]
-Description=StudyGuard Kiosk (man hinh)
+Description=StudyGuard Kiosk (Cage)
 After=graphical-session.target
 PartOf=graphical-session.target
 
 [Service]
 Type=simple
 WorkingDirectory=$APP_DIR
-ExecStart=$APP_DIR/kiosk.sh
+ExecStart=$APP_DIR/kiosk-cage.sh
 Restart=always
 RestartSec=5
 TimeoutStopSec=5
+Environment=XDG_RUNTIME_DIR=/run/user/%U
+Environment=WAYLAND_DISPLAY=wayland-0
 
 [Install]
 WantedBy=default.target
