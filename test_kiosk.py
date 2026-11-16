@@ -8,7 +8,7 @@ Sau đó mở Chromium: http://127.0.0.1:5001
 import cv2
 import threading
 import time
-from flask import Flask, render_string
+from flask import Flask, render_template_string
 
 app = Flask(__name__)
 
@@ -133,7 +133,7 @@ def index():
     </script>
     </html>
     '''
-    return render_string(html)
+    return render_template_string(html)
 
 @app.route('/video')
 def video():
