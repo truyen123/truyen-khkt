@@ -31,6 +31,8 @@ fi
 
 exec "$CHROME" \
     --kiosk \
+    --disable-gpu \
+    --disable-gpu-compositing \
     --noerrdialogs \
     --disable-infobars \
     --incognito \
