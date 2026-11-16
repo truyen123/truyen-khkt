@@ -812,8 +812,8 @@ def index():
 
 @app.route("/kiosk")
 def kiosk():
-    """Giao dien cho man hinh gan truc tiep vao Pi (HDMI/DSI)."""
-    return render_template("kiosk.html")
+    """Giao dien toan man hinh cho man hinh gan truc tiep vao Pi (HDMI/DSI)."""
+    return render_template("kiosk-full.html")
 
 
 @app.route("/video_feed")
